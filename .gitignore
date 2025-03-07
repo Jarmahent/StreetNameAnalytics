@@ -1,0 +1,71 @@
+# Byte-compiled / cached
+__pycache__/
+*.py[cod]
+*$py.class
+
+assets/
+
+# Virtual environments
+venv/
+env/
+.myenv/
+*.venv
+.Python
+
+# Pyenv virtualenvs
+.python-version
+
+# Jupyter Notebook checkpoints
+.ipynb_checkpoints/
+
+# macOS system files
+.DS_Store
+
+# VSCode settings
+.vscode/
+*.code-workspace
+
+# IDE/editor files
+*.sublime-workspace
+.idea/
+*.iml
+
+# Logs and databases
+*.log
+*.sqlite3
+*.db
+
+# Python dependency files
+pip-log.txt
+pip-delete-this-directory.txt
+poetry.lock
+
+# Distribution / packaging
+dist/
+build/
+*.egg-info/
+.eggs/
+
+# Testing and coverage reports
+htmlcov/
+.tox/
+.nox/
+.coverage
+*.cover
+coverage.xml
+*.pytest_cache
+
+# Temporary and backup files
+*.bak
+*.swp
+*.swo
+*.tmp
+
+# Docker & CI/CD
+.env
+docker-compose.override.yml
+
+# Security
+.envrc
+secrets.json
+config.json
