@@ -10,3 +10,22 @@ Future plans (Personal Notes)
 
 1. Load all the data into an SQLite database (maybe mysql if this takes off)
 2. Find a way to better aggregate the data, maybe in the future I want more than just street names since this data includes geopoints too
+
+
+### Database
+
+1. Create a new SQLite db in the root of the repo called `csn.db`
+2. Create a new table within the db called `GeoAddress`
+```sql
+CREATE TABLE "GeoAddress" (
+	"id"	INTEGER,
+	"lat"	REAL,
+	"lon"	REAL,
+	"city"	TEXT,
+	"district"	TEXT,
+	"number"	TEXT,
+	"zip_code"	TEXT,
+	"streetname"	TEXT,
+	PRIMARY KEY("id" AUTOINCREMENT)
+)
+```
