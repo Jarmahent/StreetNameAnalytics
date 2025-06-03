@@ -21,6 +21,7 @@ class PropertiesSchema(BaseModel):
     region: Optional[str]
     street: Optional[str]
     unit: Optional[str]
+    state: str
 
 class GeoSchema(BaseModel):
     geometry: GeometrySchema
@@ -52,6 +53,9 @@ class GeoJSONProcessor:
             split_json = raw_geojson.split("\n")
             total_nodes = len(split_json)
             geojson_arr = []
+
+            # Extract state from the path between '/assets/us/' and the next '/'
+            state = final_path.split("/assets/us/")[1].split("/")[0].upper()
             for index, geojson_obj in enumerate(split_json):
                 try:
                     if index == 3000:
@@ -59,6 +63,7 @@ class GeoJSONProcessor:
                     if self.verbose:
                         print(f"At {index} out of {total_nodes}")
                     parsed_geojson = geojson.loads(geojson_obj)
+                    parsed_geojson["properties"]["state"] = state
                     validated_geojson = GeoSchema.model_validate(parsed_geojson)
                     geojson_arr.append(validated_geojson)
                 except Exception as e:
@@ -75,19 +80,25 @@ for session in session:
         for file in files:
             if file.endswith(gjp.geojson_ext) and "addresses" in file:
                 ggf = gjp.parse(file)
+                current_street_name = None
                 for geo in ggf:
-                    geot = GeoAddress(
-                        lat=geo.geometry.coordinates[0],
-                        lon=geo.geometry.coordinates[1],
-                        city=geo.properties.city,
-                        district=geo.properties.district,
-                        number=geo.properties.number,
-                        zip_code=geo.properties.postcode,
-                        streetname=geo.properties.street,
-                    )
-                    session.add(geot)
+                    if current_street_name != geo.properties.street:
+                        continue
+                    else:
+                        current_street_name = geo.properties.street
+                        geot = GeoAddress(
+                            lat=geo.geometry.coordinates[0],
+                            lon=geo.geometry.coordinates[1],
+                            city=geo.properties.city,
+                            district=geo.properties.district,
+                            number=geo.properties.number,
+                            zip_code=geo.properties.postcode,
+                            streetname=geo.properties.street,
+                            state=geo.properties.state,
+                        )
+                        session.add(geot)
 
                 session.commit()
 
-                break    
+                # break    
             

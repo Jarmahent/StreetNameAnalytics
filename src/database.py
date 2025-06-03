@@ -21,6 +21,7 @@ class GeoAddress(Base):
     number: str = Column(String)
     zip_code: str = Column(String)
     streetname: str = Column(String)
+    state: str = Column(String)
 
 # Database helper
 def get_db() -> Session:
